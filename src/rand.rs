@@ -34,7 +34,11 @@ use rand::prelude::Distribution;
 /// use regd_testing;
 ///
 /// let x: u32 = regd_testing::rand::generate();
-/// println!("Generated number: {}", x);
+///
+/// println!("Generated value: {}", x);
+///
+/// // Output (example):
+/// // Generated value: 1739284512  // actual value will vary
 /// ```
 ///
 /// # Panics
@@ -63,10 +67,16 @@ where
 /// use regd_testing;
 ///
 /// let x: i32 = regd_testing::rand::generate_range(10..20);
+///
 /// println!("Generated value: {}", x);
 ///
 /// let y: f64 = regd_testing::rand::generate_range(1.0..5.0);
-/// println!("Generated float value: {}", y);
+///
+/// println!("Generated value: {}", y);
+///
+/// // Output (example):
+/// // Generated value: 13
+/// // Generated value: 3.2748123901  // actual values will vary
 /// ```
 ///
 /// # Panics
@@ -97,8 +107,14 @@ where
 /// use regd_testing;
 ///
 /// let x = regd_testing::rand::generate_bytes(16);
+///
 /// assert_eq!(x.len(), 16);
-/// println!("Random bytes: {:?}", x);
+///
+/// println!("Generated value: {:?}", x);
+///
+/// // Output (example):
+/// // Generated value: [152, 34, 78, 200, 15, 99, 142, 4, 11, 87, 201, 190, 62, 250, 73, 12]
+/// // (actual value will vary)
 /// ```
 pub fn generate_bytes(length: usize) -> Vec<u8> {
     let mut rng = rand::rng();
@@ -121,8 +137,13 @@ pub fn generate_bytes(length: usize) -> Vec<u8> {
 /// use regd_testing;
 ///
 /// let x = regd_testing::rand::generate_alphanumeric(12);
-/// println!("Generated token: {}", x);
+///
 /// assert_eq!(x.len(), 12);
+///
+/// println!("Generated value: {}", x);
+///
+/// // Output (example):
+/// // Generated value: "aZ8kD9fQwL2x"  // actual value will vary
 /// ```
 pub fn generate_alphanumeric(length: usize) -> String {
     let rng = rand::rng();
@@ -150,8 +171,14 @@ pub fn generate_alphanumeric(length: usize) -> String {
 /// use regd_testing;
 ///
 /// let x = regd_testing::rand::generate_badfile(12);
-/// println!("Generated unique filename: {}", x);
+///
 /// assert!(std::fs::metadata(&x).is_err()); // Confirm file does not exist
+///
+/// println!("Generated unique filename: {}", x);
+///
+/// // Output (example):
+/// // Generated unique filename: "nonexistent_file_X8v9L1qKzW0a"
+/// // (path is unique and file is guaranteed not to exist)
 /// ```
 ///
 /// # Panics

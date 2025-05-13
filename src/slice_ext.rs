@@ -29,7 +29,9 @@
 /// use regd_testing::prelude::*;
 ///
 /// let mut numbers = [1, 2, 3, 4, 5];
+///
 /// numbers.shuffle();
+///
 /// println!("Shuffled numbers: {:?}", numbers);
 ///
 /// if let Some(choice) = numbers.choose() {
@@ -40,6 +42,12 @@
 ///     *choice = 10;
 ///     println!("Modified choice: {}", choice);
 /// }
+///
+/// // Output (example):
+/// // Shuffled numbers: [4, 2, 5, 1, 3]
+/// // Random choice: 5
+/// // Modified choice: 10
+/// // (actual order and values will vary)
 /// ```
 ///
 /// [`choose`]: Self::choose

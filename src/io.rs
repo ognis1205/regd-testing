@@ -37,11 +37,16 @@ use tempfile::NamedTempFile;
 /// ```no_run
 /// use regd_testing;
 ///
-/// let lines = regd_testing::io::read_lines("Cargo.toml").expect("failed to open file");
-/// for line in lines {
-///     let line = line.expect("failed to read line");
+/// let lines = regd_testing::io::read_lines("README.md")
+///     .expect("README.md should exist in the current directory");
+///
+/// for line in lines.take(1) {
+///     let line = line.expect("first line of README.md should be readable");
 ///     println!("{}", line);
 /// }
+///
+/// // Outputs:
+/// //  # regd testing
 /// ```
 pub fn read_lines(path: impl AsRef<path::Path>) -> io::Result<io::Lines<io::BufReader<fs::File>>> {
     let file = fs::File::open(path.as_ref())?;
@@ -62,10 +67,24 @@ pub fn read_lines(path: impl AsRef<path::Path>) -> io::Result<io::Lines<io::BufR
 ///
 /// # Examples
 /// ```no_run
+/// use std::fs;
+/// use std::io;
+/// use std::io::Read;
+///
 /// use regd_testing;
 ///
 /// let file = regd_testing::io::try_new_file("output.txt", "Hello, world!")
-///     .expect("failed to create or write to file");
+///     .expect("output.txt should be writable");
+///
+/// let mut contents = String::new();
+/// io::BufReader::new(file)
+///    .read_to_string(&mut contents)
+///    .expect("should be able to read the file");
+///
+/// println!("File contents: {}", contents);
+///
+/// // Output:
+/// // File contents: Hello, world!
 /// ```
 pub fn try_new_file(
     path: impl AsRef<path::Path>,
@@ -91,12 +110,23 @@ pub fn try_new_file(
 ///
 /// # Examples
 /// ```no_run
+/// use std::fs;
+///
 /// use regd_testing;
 ///
 /// let tempfile = regd_testing::io::try_new_tempfile("Temporary data")
-///     .expect("failed to create temporary file");
+///     .expect("should be able to create a temporary file");
 ///
 /// println!("Temp file path: {:?}", tempfile.path());
+///
+/// let contents = fs::read_to_string(tempfile.path())
+///     .expect("should be able to read from the temporary file");
+///
+/// println!("Temp file contents: {}", contents);
+///
+/// // Output (example):
+/// // Temp file path: "/tmp/.tmpabc123"  // actual path will vary
+/// // Temp file contents: Temporary data
 /// ```
 pub fn try_new_tempfile(content: impl AsRef<str>) -> io::Result<NamedTempFile> {
     let mut file = NamedTempFile::new()?;
@@ -121,7 +151,8 @@ pub fn try_new_tempfile(content: impl AsRef<str>) -> io::Result<NamedTempFile> {
 /// ```no_run
 /// use regd_testing;
 ///
-/// regd_testing::io::try_remove_file("temp.txt").expect("failed to remove file");
+/// regd_testing::io::try_remove_file("temp.txt")
+///     .expect("should be able to remove the file");
 /// ```
 pub fn try_remove_file(path: impl AsRef<path::Path>) -> io::Result<()> {
     for attempt in 1..=4 {
